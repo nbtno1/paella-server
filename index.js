@@ -15,7 +15,7 @@ app.post("/paella/detail", async(request, response) => {
   .lean()
   .exec((err, arr) => {
     response.json({
-      code:200,
+      code: 200,
       data: arr
     })
   })
@@ -41,15 +41,24 @@ app.get("/paella/header", async(request, response) => {
   }
 })
 
+app.post("/paella/search", async(request, response) => {
+  const body = request.body.search_item
+  return RecipeModel.find({name: new RegExp(body.trim())})
+    .lean()
+    .exec((err, q) => {
+      return response.send(q)
+    })
+})
+
 app.listen(3000, () => {
-    console.log("//////////////  At :3000")
+    console.log("//////////////  At port :3000  //////////////")
 })
 
 const RecipeModel = Mongoose.model("recipes", {
     name: String,
     ingredient: Array,
     instruction: Schema.Types.Mixed
-});
+})
 
 const HorizontalModel = Mongoose.model("horviews", {
     titleData: String,
